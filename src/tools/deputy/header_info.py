@@ -1,22 +1,10 @@
+import json
 from dataclasses import dataclass
 
 from bs4.element import Tag
 
-
-MONTH_NAMES = {
-    "ENERO": "01",
-    "FEBRERO": "02",
-    "MARZO": "03",
-    "ABRIL": "04",
-    "MAYO": "05",
-    "JUNIO": "06",
-    "JULIO": "07",
-    "AGOSTO": "08",
-    "SEPTIEMBRE": "09",
-    "OCTUBRE": "10",
-    "NOVIEMBRE": "11",
-    "DICIEMBRE": "12",
-}
+from constansts import MONTH_NAMES
+from utils.utils import identify_party
 
 
 @dataclass
@@ -25,7 +13,7 @@ class DeputyHeaderInfo:
     Clase encargada de extraer informacion de diputado de pagina principal
     """
 
-    deputy_table: Tag
+    header_table: Tag
 
     @staticmethod
     def clean_row_election_type(raw_election_type: str) -> dict:
@@ -90,10 +78,16 @@ class DeputyHeaderInfo:
 
         return {"email": email.strip(), "extension": extension.strip()}
 
+    def get_party(self) -> dict:
+        _, raw_party = self.header_table.find_all("img")
+        raw_party = raw_party.attrs.get("src")
+        party = identify_party(raw_party)
+
+        return {"partido": party}
+
     def get_info(self):
-        deputy_name, *rows = [
-            row.text.strip() for row in self.deputy_table.find_all("tr")
-        ]
+        deputy_table = self.header_table.find("table")
+        deputy_name, *rows = [row.text.strip() for row in deputy_table.find_all("tr")]
 
         election_type, entity, email, date_birth, alternate = rows
 
@@ -103,8 +97,12 @@ class DeputyHeaderInfo:
         deputy_info |= self.clean_row_email(email)
         deputy_info |= self.clean_row_date_birth(date_birth)
         deputy_info |= self.clean_row_alternate(alternate)
+        deputy_info |= self.get_party()
 
         return deputy_info
+
+    def __str__(self) -> None:
+        return json.dumps(self.get_info(), indent=4)
 
 
 if __name__ == "__main__":
