@@ -10,7 +10,7 @@ from utils.utils import identify_party
 @dataclass
 class DeputyHeaderInfo:
     """
-    Clase encargada de extraer informacion de diputado de pagina principal
+    Extrae información de diputado de página principal.
     """
 
     header_table: Tag
@@ -18,8 +18,8 @@ class DeputyHeaderInfo:
     @staticmethod
     def clean_row_election_type(raw_election_type: str) -> dict:
         """
-        Limpia y obtinen la informacion de manera organizada
-        del tipo de eleccion del diputado
+        Limpia y obtinen información de manera organizada
+        del tipo de elección del diputado.
         """
         _, election_type = raw_election_type.split(":")
 
@@ -28,8 +28,8 @@ class DeputyHeaderInfo:
     @staticmethod
     def clean_row_alternate(raw_alternate: str) -> dict:
         """
-        Limpia y obtinen la informacion de manera organizada
-        del tipo de eleccion del diputado
+        Limpia y obtinen información de manera organizada
+        del suplente.
         """
         _, alternate = raw_alternate.split(":")
 
@@ -38,8 +38,8 @@ class DeputyHeaderInfo:
     @staticmethod
     def clean_row_date_birth(raw_day_birth: str) -> dict:
         """
-        Limpia y obtinen la informacion de manera organizada
-        la fecha de nacimiento
+        Limpia y obtinen información de manera organizada
+        la fecha de nacimiento.
         """
         _, date_birth = raw_day_birth.split(":")
         day, month_name, year = date_birth.upper().split("-")
@@ -52,8 +52,8 @@ class DeputyHeaderInfo:
     @staticmethod
     def clean_row_entity(raw_entity: str) -> dict:
         """
-        Limpia y obtinen la informacion de manera organizada
-        de la entdidad del diputado
+        Limpia y obtinen información de manera organizada
+        de la entidad del diputado.
         """
         entity_name, district, district_code = [
             el.strip() for el in raw_entity.split("|")
@@ -71,8 +71,8 @@ class DeputyHeaderInfo:
     @staticmethod
     def clean_row_email(raw_email: str) -> dict:
         """
-        Limpia y obtinen la informacion de manera organizada
-        del renglon de email
+        Limpia y obtinen información de manera organizada
+        de email.
         """
         _, _, email, _, extension = raw_email.split()
 

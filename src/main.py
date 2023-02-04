@@ -17,6 +17,11 @@ _, information, *_ = tables
 
 html_table = information.find("table")
 
+# Encuentra la tabla de las comisiones que pertenece
+comision_table, *_ = [
+    table for table in tables if table.attrs.get("cellpadding") == "2"
+]
+
 
 if __name__ == "__main__":
     deputy = DeputyHeaderInfo(header_table=html_table)
