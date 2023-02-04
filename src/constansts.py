@@ -26,3 +26,9 @@ class Parties(Enum):
 
 
 PARTIES = {party.value: party.name for party in list(Parties)}
+
+
+class Urls:
+    BASE_URL = "http://sitl.diputados.gob.mx/LXIV_leg"
+    CURRICULA_URL = f"{BASE_URL}/curricula.php"
+    ATTENDANCE_URL = f"{BASE_URL}/asistencias_diputados_xperiodonplxiv.php"
