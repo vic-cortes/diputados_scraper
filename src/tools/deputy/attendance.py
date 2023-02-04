@@ -22,7 +22,7 @@ def get_soup(url: str, params: dict = None) -> BeautifulSoup:
 
 
 @dataclass
-class AttendanceCrawler:
+class AttendanceSessions:
     """
     Responsable de obtener el url del total de listados
     de periodo de sesiones.
@@ -30,7 +30,7 @@ class AttendanceCrawler:
 
     deputy_id: int
 
-    def get_session_metadata(self) -> List[Dict]:
+    def get_list(self) -> List[Dict]:
         params = {"dipt": self.deputy_id}
         soup = get_soup(Urls.ATTENDANCE_URL, params=params)
         tables = soup.find_all("table")
@@ -61,12 +61,12 @@ class AttendanceCrawler:
 
 
 @dataclass
-class Attendance:
+class AttendanceCalendar:
     """
     Obtiene las asistencias de la tabla de fechas de cada periodo de sesion.
     """
 
-    session_attendance_url: str
+    session_calendar_url: str
 
     @staticmethod
     def _clean_calendar_table(calendar_table: Tag) -> List[Dict]:
@@ -107,7 +107,7 @@ class Attendance:
         """
         Obtinene y filtra las tablas que cuenten con calendario
         """
-        soup = get_soup(url=self.session_attendance_url)
+        soup = get_soup(url=self.session_calendar_url)
         tables = soup.find_all("table")
 
         calendar_tables = []
@@ -120,13 +120,31 @@ class Attendance:
             clean_table = self._clean_calendar_table(table)
             calendar_tables.append(clean_table)
 
-        flat_list = [item for sublist in calendar_tables for item in sublist]
+        flat_calendar_list = [item for sublist in calendar_tables for item in sublist]
 
-        return flat_list
+        return flat_calendar_list
+
+    @classmethod
+    def get_data(cls, url: str) -> List[Dict]:
+        calendar = cls(session_calendar_url=url)
+        return calendar.get_attendance()
 
 
 def run():
-    deputy_attendance = AttendanceCrawler(deputy_id=2)
+    session = AttendanceSessions(deputy_id=2)
+    list_sessions = session.get_list()
+
+    all_attendance = []
+
+    for session in list_sessions:
+        session_url = session.get("href")
+        current_attendance = AttendanceCalendar.get_data(session_url)
+
+        all_attendance.append(current_attendance)
+
+    flat_all_attendance_list = [item for sublist in all_attendance for item in sublist]
+
+    return flat_all_attendance_list
 
 
 if __name__ == "__main__":

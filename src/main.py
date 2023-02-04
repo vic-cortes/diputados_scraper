@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-from tools.deputy.attendance import AttendanceCrawler, Attendance
+from tools.deputy.attendance import AttendanceSessions, AttendanceCalendar
 from tools.deputy.header_info import DeputyHeaderInfo
 
 
@@ -27,13 +27,17 @@ ASISTENCIAS_URL = f"{BASE_URL}/asistencias_diputados_xperiodonplxiv.php"
 
 
 if __name__ == "__main__":
-    deputy_attendance = AttendanceCrawler(deputy_id=2)
+    session = AttendanceSessions(deputy_id=2)
+    list_sessions = session.get_list()
 
-    list_attendance = deputy_attendance.get_session_metadata()
+    all_attendance = []
 
-    attendance_url = list_attendance[0].get("href")
-    deputy = Attendance(session_attendance_url=attendance_url)
+    for session in list_sessions:
+        session_url = session.get("href")
+        current_attendance = AttendanceCalendar.get_data(session_url)
 
-    deputy.get_attendance()
+        all_attendance.append(current_attendance)
 
-    print(list_attendance)
+    flat_all_attendance_list = [item for sublist in all_attendance for item in sublist]
+
+    flat_all_attendance_list
