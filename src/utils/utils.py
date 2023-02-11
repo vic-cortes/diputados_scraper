@@ -14,3 +14,8 @@ def identify_party(raw_party: str) -> str:
             return party_name
 
     return f"NO_IDENTIFICADO/{raw_party}"
+
+
+def print_title(title: str) -> None:
+    DEL = "*" * 10
+    print(f"{DEL} {title.upper()} {DEL}")

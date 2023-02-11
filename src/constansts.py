@@ -29,6 +29,8 @@ PARTIES = {party.value: party.name for party in list(Parties)}
 
 
 class Urls:
-    BASE_URL = "http://sitl.diputados.gob.mx/LXIV_leg"
+    BASE_URL = "http://sitl.diputados.gob.mx"
+    LXIV_URL = f"{BASE_URL}/LXIV_leg"
+    LXV_URL = f"{BASE_URL}/LXV_leg"
     CURRICULA_URL = f"{BASE_URL}/curricula.php"
     ATTENDANCE_URL = f"{BASE_URL}/asistencias_diputados_xperiodonplxiv.php"

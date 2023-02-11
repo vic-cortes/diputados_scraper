@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from tools.deputy.attendance import AttendanceSessions, AttendanceCalendar
-from tools.deputy.header_info import DeputyHeaderInfo
+from tools.deputy.header_info import LXIVDeputyHeaderInfo
 
 
 BASE_URL = "http://sitl.diputados.gob.mx/LXIV_leg"
@@ -10,9 +10,9 @@ CURRICULA_URL = f"{BASE_URL}/curricula.php"
 ASISTENCIAS_URL = f"{BASE_URL}/asistencias_diputados_xperiodonplxiv.php"
 
 
-# response = requests.get(url=CURRICULA_URL, params={"dipt": 2})
+response = requests.get(url=CURRICULA_URL, params={"dipt": 2})
 
-# html = response.content
+html = response.content
 # soup = BeautifulSoup(html, "lxml")
 
 # tables = soup.find_all("table")

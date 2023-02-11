@@ -35,7 +35,7 @@ class AttendanceSessions:
         soup = get_soup(Urls.ATTENDANCE_URL, params=params)
         tables = soup.find_all("table")
 
-        # La ultima tabla es la que cuenta con al informacion
+        # La última tabla es la que cuenta con al información
         # de asistencias
         *_, last_table = tables
 
@@ -75,7 +75,7 @@ class AttendanceCalendar:
         asistencias.
         """
 
-        # El titulo de la tabla es la fecha
+        # El título de la tabla es la fecha
         date, *_ = calendar_table.find_all("tr")
         days = calendar_table.find_all("td")
 
@@ -84,7 +84,7 @@ class AttendanceCalendar:
         month_number = MONTH_NAMES.get(month)
         base_date = f"{year}-{month_number}"
 
-        # Obtener los dias el cual hubo sesion. Cada dia con sesion
+        # Obtener los días el cual hubo sesión. Cada día con sesión
         # la celda esta marcada con verde #D6E2E2
         session_days = []
 

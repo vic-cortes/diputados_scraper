@@ -8,7 +8,7 @@ from utils.utils import identify_party
 
 
 @dataclass
-class DeputyHeaderInfo:
+class LXIVDeputyHeaderInfo:
     """
     Extrae información de diputado de página principal.
     """
