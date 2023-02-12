@@ -1,4 +1,5 @@
 import re
+import json
 from dataclasses import dataclass
 from typing import Dict, List
 
@@ -28,12 +29,10 @@ class AttendanceSessions:
     de periodo de sesiones.
     """
 
-    deputy_id: int
+    soup: Tag
 
     def get_list(self) -> List[Dict]:
-        params = {"dipt": self.deputy_id}
-        soup = get_soup(Urls.ATTENDANCE_URL, params=params)
-        tables = soup.find_all("table")
+        tables = self.soup.find_all("table")
 
         # La última tabla es la que cuenta con al información
         # de asistencias
@@ -59,11 +58,14 @@ class AttendanceSessions:
 
         return all_attendances_urls
 
+    def __str__(self) -> None:
+        return json.dumps(self.get_list(), indent=4)
+
 
 @dataclass
 class AttendanceCalendar:
     """
-    Obtiene las asistencias de la tabla de fechas de cada periodo de sesion.
+    Obtiene las asistencias de la tabla de fechas de cada período de sesión.
     """
 
     session_calendar_url: str
@@ -71,10 +73,9 @@ class AttendanceCalendar:
     @staticmethod
     def _clean_calendar_table(calendar_table: Tag) -> List[Dict]:
         """
-        Obtiene informacion del calendario de
+        Obtiene información del calendario de
         asistencias.
         """
-
         # El título de la tabla es la fecha
         date, *_ = calendar_table.find_all("tr")
         days = calendar_table.find_all("td")
@@ -85,7 +86,7 @@ class AttendanceCalendar:
         base_date = f"{year}-{month_number}"
 
         # Obtener los días el cual hubo sesión. Cada día con sesión
-        # la celda esta marcada con verde #D6E2E2
+        # la celda está marcada con verde #D6E2E2
         session_days = []
 
         for day in days:
